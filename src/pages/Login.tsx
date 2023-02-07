@@ -1,14 +1,19 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/utility/Button";
 import Card from "../components/utility/Card";
 import { useFormik } from "formik";
 import * as Yup from "Yup";
 import { useLogin } from "../hooks/useLogin";
 import Spinner from "../components/utility/Spinner";
-
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../config/firebase-config";
+import { FcGoogle } from "react-icons/fc";
+import { useAtom } from "jotai";
+import { userAtom } from "../../atoms";
 const Login = () => {
-  // const [password, setPassword] = useState("");
+  const [, setUserAtom] = useAtom(userAtom);
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { loginUser, error, isPending } = useLogin();
   const formik = useFormik({
@@ -33,6 +38,20 @@ const Login = () => {
       loginUser(email, password);
     },
   });
+
+  // google sign in
+  const handleGoogleSignIn = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const googleAuthProvider = new GoogleAuthProvider();
+      await signInWithPopup(auth, googleAuthProvider).then((userCredential) => {
+        setUserAtom(userCredential.user);
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="mt-3 p-3">
@@ -102,6 +121,13 @@ const Login = () => {
           <span className="text-sm mx-4 font-semibold text-gray">OR</span>
           <div className="flex-1 border border-gray"></div>
         </div>
+
+        <button
+          onClick={handleGoogleSignIn}
+          className="border border-gray hover:shadow-md transition-all duration-300 py-2 px-5 rounded-md flex justify-center gap-3 text-base items-center w-full"
+        >
+          <FcGoogle className="text-xl" /> Sign in with google
+        </button>
       </Card>
       <div className="mt-6">
         <Card>

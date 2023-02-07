@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/utility/Button";
 import Card from "../components/utility/Card";
 import { useFormik } from "formik";
 import * as Yup from "Yup";
 import { useSignup } from "../hooks/useSignup";
 import Spinner from "../components/utility/Spinner";
+import { FcGoogle } from "react-icons/fc";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../config/firebase-config";
+import { useAtom } from "jotai";
+import { userAtom } from "../../atoms";
 
 const Signup = () => {
+  const [, setUserAtom] = useAtom(userAtom);
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { signUp, error, isPending } = useSignup();
 
@@ -37,6 +44,20 @@ const Signup = () => {
       signUp(email, password, displayName);
     },
   });
+
+  // google sign in
+  const handleGoogleSignIn = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const googleAuthProvider = new GoogleAuthProvider();
+      await signInWithPopup(auth, googleAuthProvider).then((userCredential) => {
+        setUserAtom(userCredential.user);
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="mt-3 p-3">
@@ -126,6 +147,13 @@ const Signup = () => {
           <span className="text-sm mx-4 font-semibold text-gray">OR</span>
           <div className="flex-1 border border-gray"></div>
         </div>
+
+        <button
+          onClick={handleGoogleSignIn}
+          className="border border-gray hover:shadow-md transition-all duration-300 py-2 px-5 rounded-md flex justify-center gap-3 text-base items-center w-full"
+        >
+          <FcGoogle className="text-xl" /> Sign in with google
+        </button>
       </Card>
       <div className="mt-6">
         <Card>
