@@ -11,20 +11,22 @@ const Signup = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      displayName: "",
       email: "",
       password: "",
     },
     // validate form
     validationSchema: Yup.object({
-      username: Yup.string()
-        .max(20, "Username must be 20 characters or less")
-        .min(3, "Username must be at least 3 characters ")
-        .required("Username is required"),
+      displayName: Yup.string()
+        .max(20, "Display name must be 20 characters or less")
+        .min(3, "Display name must be at least 3 characters ")
+        .required("Display name is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
-      password: Yup.string().required("Password is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters"),
     }),
 
     // submit form
@@ -34,27 +36,27 @@ const Signup = () => {
   });
 
   return (
-    <div className="mt-10 p-3">
+    <div className="mt-3 p-3">
       <Card>
         <h2 className="mb-5 font-bold text-2xl text-green">Signup</h2>
         <form onSubmit={formik.handleSubmit} className="max-w-[20rem] ">
           <label
             className={`text-sm ${
-              formik.touched.username && formik.errors.username
+              formik.touched.displayName && formik.errors.displayName
                 ? "text-red"
                 : ""
             }`}
           >
-            {formik.touched.username && formik.errors.username
-              ? formik.errors.username
-              : "Username"}
+            {formik.touched.displayName && formik.errors.displayName
+              ? formik.errors.displayName
+              : "Display name"}
           </label>
           <input
             name="username"
-            value={formik.values.username}
+            value={formik.values.displayName}
             onChange={formik.handleChange}
             type="text"
-            placeholder="Username"
+            placeholder="Display name"
             onBlur={formik.handleBlur}
           />
 
@@ -82,7 +84,7 @@ const Signup = () => {
                 : ""
             }`}
           >
-            {formik.touched.password && formik.errors.email
+            {formik.touched.password && formik.errors.password
               ? formik.errors.password
               : "Password"}
           </label>
@@ -93,7 +95,7 @@ const Signup = () => {
               onChange={formik.handleChange}
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              required
+              onBlur={formik.handleBlur}
             />
             {formik.values.password.length > 0 && (
               <button
@@ -119,9 +121,9 @@ const Signup = () => {
       <div className="mt-6">
         <Card>
           <p className="text-center">
-            Don't have an account ?{" "}
+            Already have an account ?{" "}
             <span className="font-bold text-green">
-              <Link to="/register">Sign up</Link>
+              <Link to="/login">Login</Link>
             </span>
           </p>
         </Card>

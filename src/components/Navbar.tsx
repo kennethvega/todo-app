@@ -1,7 +1,10 @@
 import React from "react";
 import Button from "./utility/Button";
 import { Link } from "react-router-dom";
+import { useAtom } from "jotai/react";
+import { authAtom } from "../../atoms";
 const Navbar = () => {
+  const [isAuth, setIsAuth] = useAtom(authAtom);
   return (
     <header className="shadow">
       <div className="max-w-[50rem] px-3 mx-auto flex items-center h-16 justify-between">
@@ -10,6 +13,7 @@ const Navbar = () => {
             TODO APP
           </h2>
         </Link>
+
         <div className="flex gap-6 justify-center items-center">
           <Link to="/login">Login</Link>
           <Link to="/register">

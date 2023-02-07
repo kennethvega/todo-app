@@ -19,7 +19,9 @@ const Login = () => {
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
-      password: Yup.string().required("Password is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters "),
     }),
 
     // submit form
@@ -29,7 +31,7 @@ const Login = () => {
   });
 
   return (
-    <div className="mt-10 p-3">
+    <div className="mt-3 p-3">
       <Card>
         <h2 className="mb-5 font-bold text-2xl text-green">Login</h2>
         <form onSubmit={formik.handleSubmit} className="max-w-[20rem] ">
@@ -57,7 +59,7 @@ const Login = () => {
                 : ""
             }`}
           >
-            {formik.touched.password && formik.errors.email
+            {formik.touched.password && formik.errors.password
               ? formik.errors.password
               : "Password"}
           </label>
@@ -68,7 +70,7 @@ const Login = () => {
               onChange={formik.handleChange}
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              required
+              onBlur={formik.handleBlur}
             />
             {formik.values.password.length > 0 && (
               <button
