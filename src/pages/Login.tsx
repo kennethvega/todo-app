@@ -4,11 +4,13 @@ import Button from "../components/utility/Button";
 import Card from "../components/utility/Card";
 import { useFormik } from "formik";
 import * as Yup from "Yup";
+import { useLogin } from "../hooks/useLogin";
+import Spinner from "../components/utility/Spinner";
 
 const Login = () => {
   // const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const { loginUser, error, isPending } = useLogin();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -27,6 +29,8 @@ const Login = () => {
     // submit form
     onSubmit: (values) => {
       console.log(values);
+      const { email, password } = values;
+      loginUser(email, password);
     },
   });
 
@@ -82,9 +86,15 @@ const Login = () => {
               </button>
             )}
           </div>
-
+          {error && <p className="text-red">{error}</p>}
           <div className="mt-5">
-            <Button type="submit">Login</Button>
+            {isPending ? (
+              <Button>
+                <Spinner />
+              </Button>
+            ) : (
+              <Button type="submit">Login</Button>
+            )}
           </div>
         </form>
         <div className="flex items-center my-6">

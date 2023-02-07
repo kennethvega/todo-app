@@ -20,7 +20,9 @@ const Navbar = () => {
         <div className="flex gap-6 justify-center items-center">
           {!user ? (
             <>
-              <Link to="/login">Login</Link>
+              <Link to="/login" className="hover:text-green2">
+                Login
+              </Link>
               <Link to="/register">
                 <Button>Sign up </Button>
               </Link>
