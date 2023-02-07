@@ -4,10 +4,11 @@ import Button from "../components/utility/Button";
 import Card from "../components/utility/Card";
 import { useFormik } from "formik";
 import * as Yup from "Yup";
+import { useSignup } from "../hooks/useSignup";
 
 const Signup = () => {
-  // const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { signUp, error, isPending } = useSignup();
 
   const formik = useFormik({
     initialValues: {
@@ -31,7 +32,8 @@ const Signup = () => {
 
     // submit form
     onSubmit: (values) => {
-      console.log(values);
+      const { email, password, displayName } = values;
+      signUp(email, password, displayName);
     },
   });
 
@@ -52,7 +54,7 @@ const Signup = () => {
               : "Display name"}
           </label>
           <input
-            name="username"
+            name="displayName"
             value={formik.values.displayName}
             onChange={formik.handleChange}
             type="text"
@@ -109,7 +111,9 @@ const Signup = () => {
           </div>
 
           <div className="mt-5">
-            <Button type="submit">Login</Button>
+            <Button type="submit">{`${
+              isPending ? "loading" : "Signup"
+            }`}</Button>
           </div>
         </form>
         <div className="flex items-center my-6">

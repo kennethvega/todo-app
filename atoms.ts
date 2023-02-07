@@ -1,6 +1,6 @@
 import { atom } from "jotai";
-
-const authAtom = atom(false);
-const userAtom = atom(null);
+import { User } from "firebase/auth";
+const authAtom = atom<boolean>(false);
+const userAtom = atom<null | User>(null);
 
 export { authAtom, userAtom };
