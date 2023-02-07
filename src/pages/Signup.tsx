@@ -5,6 +5,7 @@ import Card from "../components/utility/Card";
 import { useFormik } from "formik";
 import * as Yup from "Yup";
 import { useSignup } from "../hooks/useSignup";
+import Spinner from "../components/utility/Spinner";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -102,7 +103,7 @@ const Signup = () => {
             {formik.values.password.length > 0 && (
               <button
                 type="button"
-                className="absolute right-3 top-2  text-base"
+                className="absolute right-3 top-2  text-small"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}
@@ -111,9 +112,13 @@ const Signup = () => {
           </div>
           {error && <p className="text-red">{error}</p>}
           <div className="mt-5">
-            <Button type="submit">{`${
-              isPending ? "loading" : "Signup"
-            }`}</Button>
+            {isPending ? (
+              <Button>
+                <Spinner />
+              </Button>
+            ) : (
+              <Button type="submit">Signup</Button>
+            )}
           </div>
         </form>
         <div className="flex items-center my-6">

@@ -10,7 +10,7 @@ const Button = ({ children, onClick, type }: ButtonProps) => {
       aria-label="button"
       type={type}
       onClick={onClick}
-      className="bg-green hover:bg-green2 py-2 px-5 rounded-md text-white w-full transition-all duration-300"
+      className="bg-green hover:bg-green2 py-2 px-5 rounded-md text-white w-full transition-all duration-300 flex  justify-center"
     >
       {children}
     </button>
