@@ -109,7 +109,7 @@ const Signup = () => {
               </button>
             )}
           </div>
-
+          {error && <p className="text-red">{error}</p>}
           <div className="mt-5">
             <Button type="submit">{`${
               isPending ? "loading" : "Signup"

@@ -3,9 +3,11 @@ import Button from "./utility/Button";
 import { Link } from "react-router-dom";
 import { useAtom } from "jotai/react";
 import { authAtom, userAtom } from "../../atoms";
+import { useLogout } from "../hooks/useLogout";
 const Navbar = () => {
-  const [user, setUserAtom] = useAtom(userAtom);
-  console.log(user);
+  const [user] = useAtom(userAtom);
+  const { logoutUser } = useLogout();
+
   return (
     <header className="shadow">
       <div className="max-w-[50rem] px-3 mx-auto flex items-center h-16 justify-between">
@@ -24,7 +26,7 @@ const Navbar = () => {
               </Link>
             </>
           ) : (
-            <Button>Logout</Button>
+            <Button onClick={() => logoutUser()}>Logout</Button>
           )}
         </div>
       </div>
