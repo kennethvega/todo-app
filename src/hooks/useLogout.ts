@@ -1,18 +1,17 @@
-import { useAtom } from "jotai";
+import { UserContext } from "./../context/AuthContext";
 import { auth } from "../config/firebase-config";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { userAtom } from "../../atoms";
-// import { useDispatch } from "react-redux";
-// import { logout } from "../features/authSlice";
-// import { toast } from "react-toastify";
+import { useContext } from "react";
+
 export const useLogout = () => {
   const navigate = useNavigate();
-  const [, setUserAtom] = useAtom(userAtom);
+  const { setUser } = useContext(UserContext);
+
   const logoutUser = () => {
     signOut(auth)
       .then(() => {
-        setUserAtom(null);
+        setUser(null);
         console.log("user signed out");
         navigate("/login");
       })

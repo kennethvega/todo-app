@@ -1,12 +1,13 @@
-import { useAtom } from "jotai";
+import { UserContext } from "./../context/AuthContext";
+
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { userAtom } from "../../atoms";
 
 export const useSignup = () => {
-  const [, setUserAtom] = useAtom(userAtom);
+  const { setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
   const [error, setError] = useState<null | string>(null);
   const [isPending, setIsPending] = useState(false);
@@ -24,7 +25,7 @@ export const useSignup = () => {
           await updateProfile(user, {
             displayName: displayName,
           });
-          setUserAtom(user);
+          setUser(user);
           navigate("/");
         }
       );

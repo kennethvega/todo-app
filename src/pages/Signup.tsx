@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/utility/Button";
 import Card from "../components/utility/Card";
@@ -9,11 +9,11 @@ import Spinner from "../components/utility/Spinner";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { useAtom } from "jotai";
-import { userAtom } from "../../atoms";
+
+import { UserContext } from "../context/AuthContext";
 
 const Signup = () => {
-  const [, setUserAtom] = useAtom(userAtom);
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { signUp, error, isPending } = useSignup();
@@ -51,7 +51,7 @@ const Signup = () => {
     try {
       const googleAuthProvider = new GoogleAuthProvider();
       await signInWithPopup(auth, googleAuthProvider).then((userCredential) => {
-        setUserAtom(userCredential.user);
+        setUser(userCredential.user);
       });
       navigate("/");
     } catch (error) {
@@ -82,6 +82,7 @@ const Signup = () => {
             type="text"
             placeholder="Display name"
             onBlur={formik.handleBlur}
+            className="mb-3 mt-1"
           />
 
           <label
@@ -100,6 +101,7 @@ const Signup = () => {
             type="text"
             placeholder="Email"
             onBlur={formik.handleBlur}
+            className="mb-3 mt-1"
           />
           <label
             className={`text-sm ${
@@ -120,11 +122,12 @@ const Signup = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               onBlur={formik.handleBlur}
+              className="mb-3 mt-1"
             />
             {formik.values.password.length > 0 && (
               <button
                 type="button"
-                className="absolute right-3 top-2  text-small"
+                className="absolute right-3 top-2  text-small text-green"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}
