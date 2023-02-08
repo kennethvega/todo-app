@@ -1,29 +1,24 @@
+import { useState, SetStateAction, Dispatch } from "react";
 import TodoItem from "./TodoItem";
 
-const dummyData = [
-  {
-    id: "1",
-    task: "Study react",
-    complete: false,
-  },
-  {
-    id: "2",
-    task: "Study graphql",
-    complete: false,
-  },
-  {
-    id: "3",
-    task: "Clean room",
-    complete: true,
-  },
-];
+type Task = {
+  id: string;
+  task: string;
+  complete: boolean;
+};
+type TodosProps = {
+  task: Task[];
+  setTask: Dispatch<
+    SetStateAction<{ id: string; task: string; complete: boolean }[]>
+  >;
+};
 
-const Todos = () => {
+const Todos = ({ task, setTask }: TodosProps) => {
   return (
     <div>
       <h3 className="mt-10">To do's</h3>
       <>
-        {dummyData.map((todo) => {
+        {task.map((todo) => {
           return <TodoItem todo={todo} key={todo.id} />;
         })}
       </>

@@ -8,7 +8,6 @@ export interface UserContextInterface {
   setUser: Dispatch<SetStateAction<User | null>>;
   setIsAuth: Dispatch<SetStateAction<boolean | User>>;
 }
-
 const initialState = {
   user: null,
   isAuth: false,
@@ -20,7 +19,6 @@ export const UserContext = createContext(initialState);
 type UserProviderProps = {
   children: ReactNode;
 };
-
 export default function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<null | User>(null);
   const [isAuth, setIsAuth] = useState<boolean | User>(false);

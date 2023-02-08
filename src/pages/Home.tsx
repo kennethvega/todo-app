@@ -1,20 +1,34 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { BsPlusSquareFill } from "react-icons/bs";
 import Container from "../components/utility/Container";
 import Todos from "../components/Todos";
 import { UserContext } from "../context/AuthContext";
 
+const initialState = [
+  {
+    id: "1",
+    task: "Study react",
+    complete: false,
+  },
+  {
+    id: "2",
+    task: "Study graphql",
+    complete: false,
+  },
+  {
+    id: "3",
+    task: "Clean room",
+    complete: true,
+  },
+];
+
 const Home = () => {
-  const { user } = useContext(UserContext);
+  const [task, setTask] = useState(initialState);
+
   return (
     <div className="mt-10">
       <Container>
-        <h2>Add a task</h2>
-        <div className="flex gap-3 justify-center items-center max-h-[10rem] ">
-          <input />
-          <BsPlusSquareFill className="text-[2.6rem] text-green hover:text-green2 cursor-pointer transition-all duration-300" />
-        </div>
-        <Todos />
+        <Todos task={task} setTask={setTask} />
       </Container>
     </div>
   );
