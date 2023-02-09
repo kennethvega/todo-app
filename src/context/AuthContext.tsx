@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { createContext, Dispatch, SetStateAction, ReactNode } from "react";
-import { User } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "../config/firebase-config";
 export interface UserContextInterface {
   user: null | User;
   isAuth: boolean | User;
@@ -22,6 +23,15 @@ type UserProviderProps = {
 export default function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<null | User>(null);
   const [isAuth, setIsAuth] = useState<boolean | User>(false);
+
+  // check if authentication is ready
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setIsAuth(true);
+      setUser(user);
+      unsub();
+    });
+  }, [auth]);
 
   return (
     <UserContext.Provider value={{ user, isAuth, setUser, setIsAuth }}>

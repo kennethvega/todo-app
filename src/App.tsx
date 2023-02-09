@@ -12,15 +12,6 @@ function App() {
   const { user, isAuth, setUser, setIsAuth } = useContext(UserContext);
   console.log(isAuth);
 
-  // check if authentication is ready
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      setIsAuth(true);
-      setUser(user);
-      unsub();
-    });
-  }, [auth]);
-
   return (
     <>
       {isAuth && (

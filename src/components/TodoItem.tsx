@@ -1,59 +1,74 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
+import Tippy from "@tippyjs/react";
+import Modal from "./utility/Modal";
+import Button from "./utility/Button";
+import AddTodo from "../components/AddTodo";
+import { TodoType } from "../ts/Todos";
+
 type TodoItemProps = {
-  todo: {
-    id: string;
-    complete: boolean;
-    task: string;
-  };
+  todo: TodoType;
 };
 
 const TodoItem = ({ todo }: TodoItemProps) => {
-  const [isComplete, setIsComplete] = useState(todo.complete);
+  const [complete, setComplete] = useState(todo.complete);
 
   const handleCheckBoxChange = (e: React.SyntheticEvent) => {
-    setIsComplete(!isComplete);
+    setComplete(!complete);
   };
+
   return (
     <>
-      {todo.complete ? (
-        <div className="my-3 border border-gray0 p-3 rounded-md text-gray0 flex gap-3 items-center">
-          <input
-            type="checkbox"
-            className="checkbox cursor-pointer"
-            checked={isComplete}
-            onClick={handleCheckBoxChange}
-            id={todo.id}
-          />
-          <label htmlFor={todo.id} className="cursor-pointer">
-            {todo.task}
-          </label>
+      <div
+        className={`${
+          complete ? "text-gray border-gray0" : " text-dark border-gray shadow "
+        } my-3 border  p-3 rounded-md flex gap-3 items-center`}
+      >
+        <input
+          type="checkbox"
+          className="checkbox cursor-pointer   "
+          checked={complete}
+          onChange={handleCheckBoxChange}
+          id={todo.id}
+        />
+        <label htmlFor={todo.id} className="cursor-pointer">
+          {todo.task}
+        </label>
+        <div
+          className={`${
+            complete ? "text-gray" : "text-dark"
+          } ml-auto flex  gap-3 `}
+        >
+          <Tippy content="Edit">
+            <span>
+              <FiEdit
+                size={20}
+                className="cursor-pointer hover:text-green transition-all duration-300"
+              />
+            </span>
+          </Tippy>
+          <Tippy content="Delete">
+            <span>
+              <AiOutlineDelete
+                size={22}
+                className="cursor-pointer hover:text-red  transition-all duration-300"
+              />
+            </span>
+          </Tippy>
+        </div>
+      </div>
+      {/* Modal */}
+      {/* {openModal && (
+        <Modal openModal onClose={() => setOpenModal(false)}>
+          <h3 className="mt-3 mb-2 text-2xl">Edit</h3>
 
-          <div className="ml-auto flex  gap-3">
-            <FiEdit size={20} className="cursor-pointer" />
-            <AiOutlineDelete size={22} className="cursor-pointer" />
+          <input value={todo.todo} />
+          <div className="mt-10 min-w-[20rem]">
+            <Button>Save</Button>
           </div>
-        </div>
-      ) : (
-        // not complete
-        <div className="my-3 text-dark border border-gray p-3 rounded-md shadow flex gap-3 items-center">
-          <input
-            type="checkbox"
-            className="checkbox cursor-pointer   "
-            checked={isComplete}
-            onClick={handleCheckBoxChange}
-            id={todo.id}
-          />
-          <label htmlFor={todo.id} className="cursor-pointer">
-            {todo.task}
-          </label>
-          <div className="ml-auto flex  gap-3 text-dark">
-            <FiEdit size={20} className="cursor-pointer" />
-            <AiOutlineDelete size={22} className="cursor-pointer" />
-          </div>
-        </div>
-      )}
+        </Modal> */}
+      {/* )} */}
     </>
   );
 };

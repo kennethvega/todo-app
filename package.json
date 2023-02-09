@@ -9,13 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "firebase": "^9.17.1",
     "formik": "^2.2.9",
-    "jotai": "^2.0.0",
+    "graphql": "^16.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.8.0",
+    "urql": "^3.0.3",
     "yup": "^0.32.11"
   },
   "devDependencies": {
