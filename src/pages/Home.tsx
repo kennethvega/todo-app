@@ -9,6 +9,7 @@ import { UserContext } from "../context/AuthContext";
 import Spinner from "../components/utility/Spinner";
 const Home = () => {
   const { user } = useContext(UserContext);
+
   // fetch data
   const [result] = useQuery({
     query: GET_TODOS,

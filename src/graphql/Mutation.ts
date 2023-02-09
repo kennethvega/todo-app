@@ -16,3 +16,23 @@ mutation DeleteTodo($id:ID!){
   }
 }
 `;
+
+export const UPDATE_TODO = `
+mutation UpdateTodo($id:ID!,$task:String!){
+  updateTodo(id:$id,task:$task){
+    id
+    userId
+    task
+    complete
+  }
+}
+`;
+
+export const UPDATE_COMPLETE = `
+mutation UpdateComplete($id:ID!,$complete:Boolean!){
+  updateComplete(id:$id,complete:$complete){
+    id
+    complete
+  }
+}
+`;
