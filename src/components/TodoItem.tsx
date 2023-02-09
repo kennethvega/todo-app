@@ -1,21 +1,25 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import Tippy from "@tippyjs/react";
-import Modal from "./utility/Modal";
-import Button from "./utility/Button";
-import AddTodo from "../components/AddTodo";
+import { useMutation } from "urql";
 import { TodoType } from "../ts/Todos";
+import { DELETE_TODO } from "../graphql/Mutation";
 
 type TodoItemProps = {
   todo: TodoType;
 };
 
 const TodoItem = ({ todo }: TodoItemProps) => {
+  const [{ fetching, data, error }, deleteTask] = useMutation(DELETE_TODO);
   const [complete, setComplete] = useState(todo.complete);
 
   const handleCheckBoxChange = (e: React.SyntheticEvent) => {
     setComplete(!complete);
+  };
+
+  const handleDelete = (e: React.SyntheticEvent) => {
+    deleteTask({ id: todo.id });
   };
 
   return (
@@ -49,7 +53,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
             </span>
           </Tippy>
           <Tippy content="Delete">
-            <span>
+            <span onClick={handleDelete}>
               <AiOutlineDelete
                 size={22}
                 className="cursor-pointer hover:text-red  transition-all duration-300"

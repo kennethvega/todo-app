@@ -14,6 +14,7 @@ const Home = () => {
     query: GET_TODOS,
     variables: { userId: user?.uid },
   });
+
   const { fetching, data, error } = result;
 
   return (
@@ -30,7 +31,7 @@ const Home = () => {
           {error && (
             <p className="flex justify-center text-red">{error.message}</p>
           )}
-
+          {/* To do list */}
           {data?.getTodos.map((todo: TodoType) => {
             return <TodoItem todo={todo} key={todo.id} />;
           })}

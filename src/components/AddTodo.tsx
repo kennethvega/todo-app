@@ -33,7 +33,6 @@ const AddTodo = () => {
         <button onClick={handleSubmit}>
           <BsPlusSquareFill className="text-[2.6rem] text-green hover:text-green2 cursor-pointer transition-all duration-300" />
         </button>
-        {/* <BsPlusSquareFill className="text-[2.6rem] text-green hover:text-green2 cursor-pointer transition-all duration-300" /> */}
       </div>
     </>
   );

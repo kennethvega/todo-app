@@ -8,3 +8,11 @@ mutation AddTodo($userId:String!,$task:String!,$complete:Boolean!){
   }
 }
 `;
+
+export const DELETE_TODO = `
+mutation DeleteTodo($id:ID!){
+  deleteTodo(id:$id){
+    id
+  }
+}
+`;
