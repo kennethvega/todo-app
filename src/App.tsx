@@ -1,17 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-import { auth } from "./config/firebase-config";
 
-import { onAuthStateChanged } from "firebase/auth";
 import { UserContext } from "./context/AuthContext";
 function App() {
-  const { user, isAuth, setUser, setIsAuth } = useContext(UserContext);
-  console.log(isAuth);
+  const { user, isAuth } = useContext(UserContext);
 
+  // jest react test, react-hook-form
+  // data router -nice to have
   return (
     <>
       {isAuth && (

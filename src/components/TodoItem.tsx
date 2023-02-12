@@ -16,24 +16,27 @@ type TodoItemProps = {
 const TodoItem = ({ todo }: TodoItemProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [updateNewTask, setUpdateNewTask] = useState(todo.task);
-  const [, deleteTask] = useMutation(DELETE_TODO);
-  const [, updateTodo] = useMutation(UPDATE_TODO);
+  const [deleteTaskResult, deleteTask] = useMutation(DELETE_TODO); //naming best practice e.g. deleteTaskResult.fetching
+  const [updateTodoResult, updateTodo] = useMutation(UPDATE_TODO);
   const [, updateComplete] = useMutation(UPDATE_COMPLETE);
 
-  const handleCheckBoxChange = (e: React.SyntheticEvent) => {
-    updateComplete({ id: todo.id, complete: !todo.complete });
+  const handleCheckBoxChange: React.ChangeEventHandler<
+    HTMLInputElement
+  > = async (e) => {
+    await updateComplete({ id: todo.id, complete: !todo.complete });
   };
 
-  const handleTaskUpdate = (e: React.SyntheticEvent) => {
-    updateTodo({ id: todo.id, task: updateNewTask });
+  // e:
+  const handleTaskUpdate = async () => {
+    await updateTodo({ id: todo.id, task: updateNewTask });
     setOpenModal(false);
   };
 
-  const handleDelete = (e: React.SyntheticEvent) => {
+  const handleDelete = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    deleteTask({ id: todo.id });
+    await deleteTask({ id: todo.id });
   };
-
+  // classnames library || clsx
   return (
     <>
       <div
@@ -84,8 +87,15 @@ const TodoItem = ({ todo }: TodoItemProps) => {
             value={updateNewTask}
             onChange={(e) => setUpdateNewTask(e.target.value)}
           />
+
           <div className="mt-10 min-w-[20rem]">
-            <Button onClick={handleTaskUpdate}>Update Task</Button>
+            {updateTodoResult.fetching ? (
+              <Button>
+                <Spinner />
+              </Button>
+            ) : (
+              <Button onClick={handleTaskUpdate}>Update Task</Button>
+            )}
           </div>
         </Modal>
       )}

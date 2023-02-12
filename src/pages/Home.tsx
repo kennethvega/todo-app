@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext, useMemo } from "react";
 import Container from "../components/utility/Container";
 import AddTodo from "../components/AddTodo";
 import TodoItem from "../components/TodoItem";
@@ -7,15 +7,27 @@ import { GET_TODOS } from "../graphql/Query";
 import { useQuery } from "urql";
 import { UserContext } from "../context/AuthContext";
 import Spinner from "../components/utility/Spinner";
+
+// type GetTodosQueryResult = {
+//   getTodos: TodoType[];
+// };
+// best practice
+type TodosQueryResult = {
+  getTodos: TodoType[];
+};
+
 const Home = () => {
   const { user } = useContext(UserContext);
-
   // fetch data
-  const [result] = useQuery({
-    query: GET_TODOS,
-    variables: { userId: user?.uid },
-  });
-
+  const context = useMemo(() => ({ additionalTypenames: ["Todo"] }), []);
+  const useTodosQuery = (userId: string | undefined) => {
+    return useQuery<TodosQueryResult>({
+      query: GET_TODOS,
+      variables: { userId },
+      context,
+    });
+  };
+  const [result] = useTodosQuery(user?.uid);
   const { fetching, data, error } = result;
 
   return (
@@ -23,7 +35,7 @@ const Home = () => {
       <div className="mt-10">
         <Container>
           <AddTodo />
-          <h3 className="mt-10">To do's</h3>
+          <h3 className="mt-10">{user?.displayName} To do's</h3>
           {fetching && (
             <div className="flex justify-center">
               <Spinner />
@@ -32,10 +44,11 @@ const Home = () => {
           {error && (
             <p className="flex justify-center text-red">{error.message}</p>
           )}
-          {/* To do list */}
-          {data?.getTodos.map((todo: TodoType) => {
-            return <TodoItem todo={todo} key={todo.id} />;
-          })}
+          {/* To do list  */}
+          {data?.getTodos.map((todo) => (
+            <TodoItem todo={todo} key={todo.id} />
+          ))}
+
           {data?.getTodos.length === 0 && (
             <p className="flex justify-center text-red">No task yet</p>
           )}

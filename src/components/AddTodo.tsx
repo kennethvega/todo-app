@@ -10,14 +10,15 @@ const AddTodo = () => {
   // fetching, data, error ?
   const [{ fetching, data, error }, addTask] = useMutation(ADD_TODO);
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    addTask({ userId: user?.uid, task: newTask, complete: false });
+    // wait first
+    await addTask({ userId: user?.uid, task: newTask, complete: false });
     setNewTask("");
   };
   return (
-    <>
-      {/* Form ? */}
+    <form onSubmit={handleSubmit}>
+      {/* Form yes || React-Hook-Form ? */}
       <label htmlFor="task">Add a task</label>
       <div className="flex gap-3 justify-center items-center max-h-[10rem] ">
         <input
@@ -30,11 +31,11 @@ const AddTodo = () => {
           placeholder="Enter task"
           className="p-2"
         />
-        <button onClick={handleSubmit}>
+        <button disabled={fetching}>
           <BsPlusSquareFill className="text-[2.6rem] text-green hover:text-green2 cursor-pointer transition-all duration-300" />
         </button>
       </div>
-    </>
+    </form>
   );
 };
 

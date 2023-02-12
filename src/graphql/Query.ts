@@ -1,5 +1,5 @@
 export const GET_TODOS = `
-  query($userId:String!) {
+  query Todos($userId:String!) {
     getTodos(userId: $userId){
       id
       userId
@@ -8,3 +8,15 @@ export const GET_TODOS = `
     }
   }
 `;
+
+// operation name
+// export const GET_TODOS = `
+//   query Todos($userId:String!) { ---> opt name
+//     todos(userId: $userId){
+//       id
+//       userId
+//       task
+//       complete
+//     }
+//   }
+// `;
