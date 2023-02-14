@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { createContext, Dispatch, SetStateAction, ReactNode } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "../config/firebase-config";
+import { createContext, Dispatch, SetStateAction, ReactNode } from 'react';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from '../config/firebase-config';
 export interface UserContextInterface {
   user: null | User;
   isAuth: boolean | User;
@@ -33,9 +33,5 @@ export default function UserProvider({ children }: UserProviderProps) {
     });
   }, [auth]);
 
-  return (
-    <UserContext.Provider value={{ user, isAuth, setUser, setIsAuth }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, isAuth, setUser, setIsAuth }}>{children}</UserContext.Provider>;
 }

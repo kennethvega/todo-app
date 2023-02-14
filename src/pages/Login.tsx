@@ -1,18 +1,18 @@
-import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "../components/utility/Button";
-import Card from "../components/utility/Card";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { useLogin } from "../hooks/useLogin";
-import Spinner from "../components/utility/Spinner";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../config/firebase-config";
-import { FcGoogle } from "react-icons/fc";
-import { UserContext } from "../context/AuthContext";
-import classNames from "classnames";
-import Error from "../components/utility/Error";
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Button from '../components/utility/Button';
+import Card from '../components/utility/Card';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { useLogin } from '../hooks/useLogin';
+import Spinner from '../components/utility/Spinner';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../config/firebase-config';
+import { FcGoogle } from 'react-icons/fc';
+import { UserContext } from '../context/AuthContext';
+import classNames from 'classnames';
+import Error from '../components/utility/Error';
 
 const Login = () => {
   const { setUser } = useContext(UserContext);
@@ -22,12 +22,8 @@ const Login = () => {
 
   // validation
   const schema = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
   });
 
   const {
@@ -49,7 +45,7 @@ const Login = () => {
       await signInWithPopup(auth, googleAuthProvider).then((userCredential) => {
         setUser(userCredential.user);
       });
-      navigate("/");
+      navigate('/');
     } catch (error) {
       console.log(error);
     }
@@ -60,46 +56,36 @@ const Login = () => {
       <Card>
         <h2 className="mb-5 font-bold text-2xl text-green">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[20rem] ">
-          <label className={classNames({ "text-red": errors.email })}>
-            {errors.email ? errors.email.message?.toString() : "Email"}
-          </label>
+          <label className={classNames({ 'text-red': errors.email })}>{errors.email ? errors.email.message?.toString() : 'Email'}</label>
           <input
-            {...register("email")}
+            {...register('email')}
             type="text"
             placeholder="Email"
-            className={classNames("mb-3 mt-1", {
-              "input-error": errors.email,
+            className={classNames('mb-3 mt-1', {
+              'input-error': errors.email,
               input: !errors.email,
             })}
           />
 
-          <label className={classNames({ "text-red": errors.password })}>
-            {errors.password ? errors.password.message?.toString() : "Password"}
-          </label>
+          <label className={classNames({ 'text-red': errors.password })}>{errors.password ? errors.password.message?.toString() : 'Password'}</label>
           <div className="relative flex items-center">
             <input
-              {...register("password")}
-              type={showPassword ? "text" : "password"}
+              {...register('password')}
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
-              className={classNames("mb-3 mt-1", {
-                "input-error": errors.password,
+              className={classNames('mb-3 mt-1', {
+                'input-error': errors.password,
                 input: !errors.password,
               })}
             />
 
-            <button
-              type="button"
-              className="absolute right-3 top-2  text-base text-green"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "Hide" : "Show"}
+            <button type="button" className="absolute right-3 top-2  text-base text-green" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
           {error && <Error>{error}</Error>}
           <div className="mt-5">
-            <Button disabled={isPending}>
-              {isPending ? <Spinner /> : "Login"}
-            </Button>
+            <Button disabled={isPending}>{isPending ? <Spinner /> : 'Login'}</Button>
           </div>
         </form>
         <div className="flex items-center my-6">
@@ -108,17 +94,14 @@ const Login = () => {
           <div className="flex-1 border border-gray"></div>
         </div>
 
-        <button
-          onClick={handleGoogleSignIn}
-          className="border border-gray hover:shadow-md transition-all duration-300 py-2 px-5 rounded-md flex justify-center gap-3 text-base items-center w-full"
-        >
+        <button onClick={handleGoogleSignIn} className="border border-gray hover:shadow-md transition-all duration-300 py-2 px-5 rounded-md flex justify-center gap-3 text-base items-center w-full">
           <FcGoogle className="text-xl" /> Sign in with google
         </button>
       </Card>
       <div className="mt-6">
         <Card>
           <p className="text-center">
-            Don't have an account ?{" "}
+            Don't have an account ?{' '}
             <span className="font-bold text-green">
               <Link to="/register">Sign up</Link>
             </span>

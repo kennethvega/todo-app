@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import Overlay from "./Overlay";
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+import Overlay from './Overlay';
 
 type ModalProps = {
   openModal: boolean;
@@ -16,16 +16,13 @@ const Modal = ({ openModal, onClose, children }: ModalProps) => {
   const handleClose = (e: React.SyntheticEvent) => {
     e.preventDefault();
     onClose?.();
-    document.body.style.overflow = "unset";
+    document.body.style.overflow = 'unset';
   };
 
   const modalContent = (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none border border-gray">
       <div className="relative w-auto my-6 mx-auto max-w-3xl xsm:mx-0 bg-white z-50 p-6 xsm:p-2 rounded">
-        <p
-          className="cursor-pointer text-4xl absolute top-2 right-6"
-          onClick={handleClose}
-        >
+        <p className="cursor-pointer text-4xl absolute top-2 right-6" onClick={handleClose}>
           &times;
         </p>
         <div>{children}</div>
@@ -36,10 +33,7 @@ const Modal = ({ openModal, onClose, children }: ModalProps) => {
   );
 
   if (isBrowser) {
-    return ReactDOM.createPortal(
-      modalContent,
-      document.getElementById("modal-root")!
-    );
+    return ReactDOM.createPortal(modalContent, document.getElementById('modal-root')!);
   } else {
     return null;
   }
