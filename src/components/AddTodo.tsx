@@ -18,9 +18,8 @@ const AddTodo = () => {
   };
   return (
     <form onSubmit={handleSubmit}>
-      {/* Form yes || React-Hook-Form ? */}
       <label htmlFor="task">Add a task</label>
-      <div className="flex gap-3 justify-center items-center max-h-[10rem] ">
+      <div className="flex gap-3 justify-center items-center max-h-[10rem] mt-2">
         <input
           type="text"
           id="task"
@@ -29,7 +28,7 @@ const AddTodo = () => {
           required
           maxLength={38}
           placeholder="Enter task"
-          className="p-2"
+          className="input h-[2.60rem] "
         />
         <button disabled={fetching}>
           <BsPlusSquareFill className="text-[2.6rem] text-green hover:text-green2 cursor-pointer transition-all duration-300" />

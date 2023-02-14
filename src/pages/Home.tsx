@@ -35,7 +35,8 @@ const Home = () => {
       <div className="mt-10">
         <Container>
           <AddTodo />
-          <h3 className="mt-10">{user?.displayName} To do's</h3>
+          <h3 className="mt-10">To do's</h3>
+          <hr className="border-gray my-3" />
           {fetching && (
             <div className="flex justify-center">
               <Spinner />

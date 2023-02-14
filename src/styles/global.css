@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-input {
+.input {
   @apply border w-full min-h-[2.3rem] rounded-md p-1 border-gray   focus:outline-none focus:border-green focus:ring-1 focus:ring-green;
+}
+.input-error {
+  @apply border w-full min-h-[2.3rem] rounded-md p-1 border-red bg-red0  focus:outline-none focus:border-red focus:ring-1 focus:ring-red;
 }
 
 .checkbox {

@@ -11,7 +11,7 @@ export const GET_TODOS = `
 
 // operation name
 // export const GET_TODOS = `
-//   query Todos($userId:String!) { ---> opt name
+//   query Todos($userId:String!) { <--- operation name
 //     todos(userId: $userId){
 //       id
 //       userId

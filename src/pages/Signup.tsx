@@ -2,15 +2,17 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/utility/Button";
 import Card from "../components/utility/Card";
-import { useFormik } from "formik";
-import * as Yup from "Yup";
+import * as Yup from "yup";
 import { useSignup } from "../hooks/useSignup";
 import Spinner from "../components/utility/Spinner";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { UserContext } from "../context/AuthContext";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Error from "../components/utility/Error";
+import classNames from "classnames";
 
 const Signup = () => {
   const { setUser } = useContext(UserContext);
@@ -18,32 +20,31 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { signUp, error, isPending } = useSignup();
 
-  const formik = useFormik({
-    initialValues: {
-      displayName: "",
-      email: "",
-      password: "",
-    },
-    // validate form
-    validationSchema: Yup.object({
-      displayName: Yup.string()
-        .max(20, "Display name must be 20 characters or less")
-        .min(3, "Display name must be at least 3 characters ")
-        .required("Display name is required"),
-      email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-      password: Yup.string()
-        .required("Password is required")
-        .min(6, "Password must be at least 6 characters"),
-    }),
-
-    // submit form
-    onSubmit: (values) => {
-      const { email, password, displayName } = values;
-      signUp(email, password, displayName);
-    },
+  // validation
+  const schema = Yup.object().shape({
+    displayName: Yup.string()
+      .max(20, "Display name must be 20 characters or less")
+      .min(3, "Display name must be at least 3 characters ")
+      .required("Display name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters"),
   });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  // form register
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const { email, password, displayName } = data;
+    await signUp(email, password, displayName);
+  };
 
   // google sign in
   const handleGoogleSignIn = async (e: React.SyntheticEvent) => {
@@ -63,86 +64,63 @@ const Signup = () => {
     <div className="mt-3 p-3">
       <Card>
         <h2 className="mb-5 font-bold text-2xl text-green">Signup</h2>
-        <form onSubmit={formik.handleSubmit} className="max-w-[20rem] ">
-          <label
-            className={`text-sm ${
-              formik.touched.displayName && formik.errors.displayName
-                ? "text-red"
-                : ""
-            }`}
-          >
-            {formik.touched.displayName && formik.errors.displayName
-              ? formik.errors.displayName
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-[20rem] ">
+          <label className={classNames({ "text-red": errors.displayName })}>
+            {errors.displayName
+              ? errors.displayName.message?.toString()
               : "Display name"}
           </label>
           <input
-            name="displayName"
-            value={formik.values.displayName}
-            onChange={formik.handleChange}
+            {...register("displayName")}
             type="text"
             placeholder="Display name"
-            onBlur={formik.handleBlur}
-            className="mb-3 mt-1"
+            className={classNames("mb-3 mt-1", {
+              "input-error": errors.displayName,
+              input: !errors.displayName,
+            })}
           />
 
-          <label
-            className={`text-sm ${
-              formik.touched.email && formik.errors.email ? "text-red" : ""
-            }`}
-          >
-            {formik.touched.email && formik.errors.email
-              ? formik.errors.email
-              : "Email"}
+          <label className={classNames({ "text-red": errors.email })}>
+            {errors.email ? errors.email.message?.toString() : "Email"}
           </label>
           <input
-            name="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
+            {...register("email")}
             type="text"
             placeholder="Email"
-            onBlur={formik.handleBlur}
-            className="mb-3 mt-1"
+            className={classNames("mb-3 mt-1", {
+              "input-error": errors.email,
+              input: !errors.email,
+            })}
           />
-          <label
-            className={`text-sm ${
-              formik.touched.password && formik.errors.password
-                ? "text-red"
-                : ""
-            }`}
-          >
-            {formik.touched.password && formik.errors.password
-              ? formik.errors.password
-              : "Password"}
+
+          <label className={classNames({ "text-red": errors.password })}>
+            {errors.password ? errors.password.message?.toString() : "Password"}
           </label>
           <div className="relative flex items-center">
             <input
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
+              {...register("password")}
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              onBlur={formik.handleBlur}
-              className="mb-3 mt-1"
+              className={classNames("mb-3 mt-1", {
+                "input-error": errors.password,
+                input: !errors.password,
+              })}
             />
-            {formik.values.password.length > 0 && (
-              <button
-                type="button"
-                className="absolute right-3 top-2  text-small text-green"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
-            )}
+
+            <button
+              type="button"
+              className="absolute right-3 top-2  text-small text-green"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
           </div>
-          {error && <p className="text-red">{error}</p>}
+
+          {error && <Error>{error}</Error>}
           <div className="mt-5">
-            {isPending ? (
-              <Button>
-                <Spinner />
-              </Button>
-            ) : (
-              <Button type="submit">Signup</Button>
-            )}
+            <Button disabled={isPending}>
+              {isPending ? <Spinner /> : "Signup"}
+            </Button>
           </div>
         </form>
         <div className="flex items-center my-6">
