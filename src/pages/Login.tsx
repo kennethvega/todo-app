@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/utility/Button';
 import Card from '../components/utility/Card';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import { useLogin } from '../hooks/useLogin';
 import Spinner from '../components/utility/Spinner';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
@@ -20,17 +18,11 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { loginUser, error, isPending } = useLogin();
 
-  // validation
-  const schema = Yup.object().shape({
-    email: Yup.string().email('Invalid email address').required('Email is required'),
-    password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const { email, password } = data;
@@ -58,7 +50,13 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[20rem] ">
           <label className={classNames({ 'text-red': errors.email })}>{errors.email ? errors.email.message?.toString() : 'Email'}</label>
           <input
-            {...register('email')}
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: 'Please enter a valid email',
+              },
+            })}
             type="text"
             placeholder="Email"
             className={classNames('mb-3 mt-1', {
@@ -70,7 +68,9 @@ const Login = () => {
           <label className={classNames({ 'text-red': errors.password })}>{errors.password ? errors.password.message?.toString() : 'Password'}</label>
           <div className="relative flex items-center">
             <input
-              {...register('password')}
+              {...register('password', {
+                required: 'Password is required',
+              })}
               type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               className={classNames('mb-3 mt-1', {

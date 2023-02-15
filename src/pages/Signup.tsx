@@ -9,11 +9,8 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../config/firebase-config';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { UserContext } from '../context/AuthContext';
-import { yupResolver } from '@hookform/resolvers/yup';
 import Error from '../components/utility/Error';
 import classNames from 'classnames';
-import * as Yup from 'yup';
-
 
 const Signup = () => {
   const { setUser } = useContext(UserContext);
@@ -21,18 +18,11 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { signUp, error, isPending } = useSignup();
 
-  // validation
-  const schema = Yup.object().shape({
-    displayName: Yup.string().max(20, 'Display name must be 20 characters or less').min(3, 'Display name must be at least 3 characters ').required('Display name is required'),
-    email: Yup.string().email('Invalid email address').required('Email is required'),
-    password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm();
 
   // form register
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -61,7 +51,13 @@ const Signup = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[20rem] ">
           <label className={classNames({ 'text-red': errors.displayName })}>{errors.displayName ? errors.displayName.message?.toString() : 'Display name'}</label>
           <input
-            {...register('displayName')}
+            {...register('displayName', {
+              required: 'Display name is required',
+              minLength: {
+                value: 3,
+                message: 'Display name must be at least 3 characters',
+              },
+            })}
             type="text"
             placeholder="Display name"
             className={classNames('mb-3 mt-1', {
@@ -72,7 +68,13 @@ const Signup = () => {
 
           <label className={classNames({ 'text-red': errors.email })}>{errors.email ? errors.email.message?.toString() : 'Email'}</label>
           <input
-            {...register('email')}
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: 'Please enter a valid email',
+              },
+            })}
             type="text"
             placeholder="Email"
             className={classNames('mb-3 mt-1', {
@@ -84,7 +86,13 @@ const Signup = () => {
           <label className={classNames({ 'text-red': errors.password })}>{errors.password ? errors.password.message?.toString() : 'Password'}</label>
           <div className="relative flex items-center">
             <input
-              {...register('password')}
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              })}
               type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               className={classNames('mb-3 mt-1', {
