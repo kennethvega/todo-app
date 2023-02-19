@@ -1,12 +1,12 @@
 import { useContext, useMemo } from 'react';
-import Container from '../components/utility/Container';
-import AddTodo from '../components/AddTodo';
-import TodoItem from '../components/TodoItem';
-import { TodoType } from '../ts/Todos';
-import { GET_TODOS } from '../graphql/Query';
+import Container from '../../components/utility/Container';
+import AddTodo from '../../components/AddTodo';
+import TodoItem from '../../components/TodoItem';
+import { TodoType } from '../../ts/Todos';
+import { GET_TODOS } from '../../graphql/Query';
 import { useQuery } from 'urql';
-import { UserContext } from '../context/AuthContext';
-import Spinner from '../components/utility/Spinner';
+import { UserContext } from '../../context/AuthContext';
+import Spinner from '../../components/utility/Spinner';
 
 // type GetTodosQueryResult = {
 //   getTodos: TodoType[];
@@ -20,10 +20,10 @@ const Home = () => {
   const { user } = useContext(UserContext);
   // fetch data
   const context = useMemo(() => ({ additionalTypenames: ['Todo'] }), []);
-  const useTodosQuery = (userId: string | undefined) => {
+  const useTodosQuery = (userID: string | undefined) => {
     return useQuery<TodosQueryResult>({
       query: GET_TODOS,
-      variables: { userId },
+      variables: { userID },
       context,
     });
   };

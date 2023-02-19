@@ -1,11 +1,11 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import { useContext } from "react";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import Signup from "./pages/Signup";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import { useContext } from 'react';
+import Login from './pages/Login/Login';
+import Home from './pages/Home/Home';
+import Signup from './pages/Signup/Signup';
 
-import { UserContext } from "./context/AuthContext";
+import { UserContext } from './context/AuthContext';
 function App() {
   const { user, isAuth } = useContext(UserContext);
 

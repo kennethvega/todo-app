@@ -1,22 +1,23 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../components/utility/Button';
-import Card from '../components/utility/Card';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { useLogin } from '../hooks/useLogin';
-import Spinner from '../components/utility/Spinner';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../config/firebase-config';
+import Button from '../../components/utility/Button';
+import Card from '../../components/utility/Card';
+import { useSignup } from '../../hooks/useSignup';
+import Spinner from '../../components/utility/Spinner';
 import { FcGoogle } from 'react-icons/fc';
-import { UserContext } from '../context/AuthContext';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../config/firebase-config';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { UserContext } from '../../context/AuthContext';
+import Error from '../../components/utility/Error';
 import classNames from 'classnames';
-import Error from '../components/utility/Error';
+import { MdOutlineError } from 'react-icons/md';
 
-const Login = () => {
+const Signup = () => {
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { loginUser, error, isPending } = useLogin();
+  const { signUp, error, isPending } = useSignup();
 
   const {
     register,
@@ -24,9 +25,10 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  // form register
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const { email, password } = data;
-    await loginUser(email, password);
+    const { email, password, displayName } = data;
+    await signUp(email, password, displayName);
   };
 
   // google sign in
@@ -46,8 +48,25 @@ const Login = () => {
   return (
     <div className="mt-3 p-3">
       <Card>
-        <h2 className="mb-5 font-bold text-2xl text-green">Login</h2>
+        <h2 className="mb-5 font-bold text-2xl text-green">Signup</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[20rem] ">
+          <label className={classNames({ 'text-red': errors.displayName })}>{errors.displayName ? errors.displayName.message?.toString() : 'Display name'}</label>
+          <input
+            {...register('displayName', {
+              required: 'Display name is required',
+              minLength: {
+                value: 3,
+                message: 'Display name must be at least 3 characters',
+              },
+            })}
+            type="text"
+            placeholder="Display name"
+            className={classNames('mb-3 mt-1', {
+              'input-error': errors.displayName,
+              input: !errors.displayName,
+            })}
+          />
+
           <label className={classNames({ 'text-red': errors.email })}>{errors.email ? errors.email.message?.toString() : 'Email'}</label>
           <input
             {...register('email', {
@@ -70,6 +89,10 @@ const Login = () => {
             <input
               {...register('password', {
                 required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
               })}
               type={showPassword ? 'text' : 'password'}
               placeholder="Password"
@@ -79,13 +102,18 @@ const Login = () => {
               })}
             />
 
-            <button type="button" className="absolute right-3 top-2  text-base text-green" onClick={() => setShowPassword(!showPassword)}>
+            <button type="button" className="absolute right-3 top-2  text-small text-green" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
-          {error && <Error>{error}</Error>}
+
+          {error && (
+            <Error>
+              <MdOutlineError size={23} /> {error}
+            </Error>
+          )}
           <div className="mt-5">
-            <Button disabled={isPending}>{isPending ? <Spinner /> : 'Login'}</Button>
+            <Button disabled={isPending}>{isPending ? <Spinner /> : 'Signup'}</Button>
           </div>
         </form>
         <div className="flex items-center my-6">
@@ -101,9 +129,9 @@ const Login = () => {
       <div className="mt-6">
         <Card>
           <p className="text-center">
-            Don't have an account ?{' '}
+            Already have an account ?{' '}
             <span className="font-bold text-green">
-              <Link to="/register">Sign up</Link>
+              <Link to="/login">Login</Link>
             </span>
           </p>
         </Card>
@@ -112,4 +140,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

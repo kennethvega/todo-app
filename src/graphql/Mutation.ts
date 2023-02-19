@@ -36,3 +36,11 @@ mutation UpdateComplete($id:ID!,$complete:Boolean!){
   }
 }
 `;
+
+export const CREATE_USER = `
+mutation CreateUser($id:ID!, $name:String!){
+  createUser(id:$id,name:$name){
+    id
+    name
+  }
+}`;
