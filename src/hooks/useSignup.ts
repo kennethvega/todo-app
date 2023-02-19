@@ -8,7 +8,7 @@ import { useMutation } from 'urql';
 import { CREATE_USER } from '../graphql/Mutation';
 
 export const useSignup = () => {
-  const [, createUser] = useMutation(CREATE_USER);
+  const [createUserResult, createUser] = useMutation(CREATE_USER);
   const { setUser, setValidateUser } = useContext(UserContext);
 
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ export const useSignup = () => {
           displayName: displayName,
         });
         await createUser({ id: user.uid, name: user.displayName });
+        console.log(createUserResult);
         setUser(user);
         setValidateUser(true);
         navigate('/');

@@ -21,7 +21,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
   const [, updateComplete] = useMutation(UPDATE_COMPLETE);
 
   const handleCheckBoxChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
-    await updateComplete({ id: todo.id, complete: !todo.complete });
+    await updateComplete({ id: todo.id, complete: !todo.done });
   };
 
   // e:
@@ -37,12 +37,12 @@ const TodoItem = ({ todo }: TodoItemProps) => {
   // classnames library || clsx
   return (
     <>
-      <div className={`${todo.complete ? 'text-gray border-gray0' : ' text-dark border-gray shadow '} my-3 border  p-3 rounded-md flex gap-3 items-center`}>
-        <input type="checkbox" className="checkbox cursor-pointer   " checked={todo.complete} onChange={handleCheckBoxChange} id={todo.id} />
+      <div className={`${todo.done ? 'text-gray border-gray0' : ' text-dark border-gray shadow '} my-3 border  p-3 rounded-md flex gap-3 items-center`}>
+        <input type="checkbox" className="checkbox cursor-pointer   " checked={todo.done} onChange={handleCheckBoxChange} id={todo.id} />
         <label htmlFor={todo.id} className="cursor-pointer">
           {todo.task}
         </label>
-        <div className={`${todo.complete ? 'text-gray' : 'text-dark'} ml-auto flex  gap-3 `}>
+        <div className={`${todo.done ? 'text-gray' : 'text-dark'} ml-auto flex  gap-3 `}>
           <Tippy content="Edit">
             <span onClick={() => setOpenModal(true)}>
               <FiEdit size={20} className="cursor-pointer hover:text-green transition-all duration-300" />

@@ -1,6 +1,5 @@
 export type TodoType = {
-  complete: boolean;
+  done: boolean;
   id: string;
   task: string;
-  userID: string;
 };

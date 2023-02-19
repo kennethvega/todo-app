@@ -17,7 +17,7 @@ function App() {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route path="/" element={validateUser && user ? <Home /> : <Login />} />
+            <Route path="/" element={user ? <Home /> : <Login />} />
             <Route path="/login" element={!user ? <Login /> : <Home />} />
             <Route path="/register" element={!user ? <Signup /> : <Home />} />
           </Routes>

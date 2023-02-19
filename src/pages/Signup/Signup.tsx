@@ -40,7 +40,7 @@ const Signup = () => {
       const googleAuthProvider = new GoogleAuthProvider();
       await signInWithPopup(auth, googleAuthProvider).then((userCredential) => {
         setUser(userCredential.user);
-        crossValidate();
+        crossValidate(userCredential.user.uid, userCredential.user.displayName);
       });
     } catch (error) {
       console.log(error);
@@ -48,19 +48,11 @@ const Signup = () => {
   };
 
   // validate to graphql server
-  const crossValidate = async () => {
+  const crossValidate = async (id: string, name: string | null) => {
     try {
-      await createUser({ id: user?.uid, name: user?.displayName });
-      if (!createUserResult.error) {
-        setValidateUser(true);
-        navigate('/');
-      } else if (createUserResult.error.message === `User with id ${user?.uid} already exists`) {
-        setValidateUser(true);
-        navigate('/');
-      } else {
-        setUser(null);
-        setValidateUser(false);
-      }
+      await createUser({ id: id, name: name });
+      setValidateUser(true);
+      navigate('/');
     } catch (error) {
       console.log(error);
     }

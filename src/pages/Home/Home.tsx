@@ -14,23 +14,27 @@ import useRedirectLoggedOutUser from '../../hooks/useRedirect';
 // };
 // best practice
 type TodosQueryResult = {
-  getTodos: TodoType[];
+  user: {
+    todos: TodoType[];
+  };
 };
 
 const Home = () => {
   const { user, validateUser } = useContext(UserContext);
-
+  // console.log(user?.uid);
   // fetch data
   const context = useMemo(() => ({ additionalTypenames: ['Todo'] }), []);
-  const useTodosQuery = (userID: string | undefined) => {
+  const useTodosQuery = (id: string | undefined) => {
     return useQuery<TodosQueryResult>({
       query: GET_TODOS,
-      variables: { userID },
+      variables: { id },
       context,
     });
   };
+
   const [result] = useTodosQuery(user?.uid);
   const { fetching, data, error } = result;
+  // console.log(data.user.todos);
 
   return (
     <>
@@ -46,11 +50,11 @@ const Home = () => {
           )}
           {error && <p className="flex justify-center text-red">{error.message}</p>}
           {/* To do list  */}
-          {data?.getTodos.map((todo) => (
+          {data?.user?.todos.map((todo) => (
             <TodoItem todo={todo} key={todo.id} />
           ))}
 
-          {data?.getTodos.length === 0 && <p className="flex justify-center text-red">No task yet</p>}
+          {data?.user?.todos.length === 0 && <p className="flex justify-center text-red">No task yet</p>}
         </Container>
       </div>
     </>

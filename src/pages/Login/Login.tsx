@@ -11,10 +11,12 @@ import { FcGoogle } from 'react-icons/fc';
 import { UserContext } from '../../context/AuthContext';
 import classNames from 'classnames';
 import Error from '../../components/utility/Error';
-import useRedirectLoggedOutUser from '../../hooks/useRedirect';
+import { useMutation } from 'urql';
+import { CREATE_USER } from '../../graphql/Mutation';
 
 const Login = () => {
-  const { setUser } = useContext(UserContext);
+  const [createUserResult, createUser] = useMutation(CREATE_USER);
+  const { setUser, setValidateUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { loginUser, error, isPending } = useLogin();
@@ -31,13 +33,25 @@ const Login = () => {
   };
 
   // google sign in
+  // google sign in
   const handleGoogleSignIn = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
       const googleAuthProvider = new GoogleAuthProvider();
       await signInWithPopup(auth, googleAuthProvider).then((userCredential) => {
         setUser(userCredential.user);
+        crossValidate(userCredential.user.uid, userCredential.user.displayName);
       });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // validate to graphql server
+  const crossValidate = async (id: string, name: string | null) => {
+    try {
+      await createUser({ id: id, name: name });
+      setValidateUser(true);
       navigate('/');
     } catch (error) {
       console.log(error);

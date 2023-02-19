@@ -1,22 +1,22 @@
+// operation name
 // export const GET_TODOS = `
 //   query Todos($userId:String!) {
-//     getTodos(userId: $userId){
+//     todos(userId: $userId){
 //       id
 //       userId
-//       task
+//       text
 //       complete
 //     }
 //   }
 // `;
 
-// operation name
 export const GET_TODOS = `
-  query Todos($userId:String!) { 
-    todos(userId: $userId){
+query User($id:String!){
+  user(id:$id){
+    todos{
       id
-      userId
-      text
-      complete
+      task
+      done
     }
   }
-`;
+}`;
