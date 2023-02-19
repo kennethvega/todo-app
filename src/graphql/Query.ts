@@ -11,10 +11,10 @@
 
 // operation name
 export const GET_TODOS = `
-  query Todos($userID:String!) { 
-    todos(userID: $userID){
+  query Todos($userId:String!) { 
+    todos(userId: $userId){
       id
-      userID
+      userId
       text
       complete
     }

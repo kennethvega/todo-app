@@ -12,13 +12,15 @@ import { UserContext } from '../../context/AuthContext';
 import Error from '../../components/utility/Error';
 import classNames from 'classnames';
 import { MdOutlineError } from 'react-icons/md';
+import { useMutation } from 'urql';
+import { CREATE_USER } from '../../graphql/Mutation';
 
 const Signup = () => {
-  const { setUser } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { user, setUser, setValidateUser } = useContext(UserContext);
+  const [createUserResult, createUser] = useMutation(CREATE_USER);
   const [showPassword, setShowPassword] = useState(false);
   const { signUp, error, isPending } = useSignup();
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -38,8 +40,27 @@ const Signup = () => {
       const googleAuthProvider = new GoogleAuthProvider();
       await signInWithPopup(auth, googleAuthProvider).then((userCredential) => {
         setUser(userCredential.user);
+        crossValidate();
       });
-      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // validate to graphql server
+  const crossValidate = async () => {
+    try {
+      await createUser({ id: user?.uid, name: user?.displayName });
+      if (!createUserResult.error) {
+        setValidateUser(true);
+        navigate('/');
+      } else if (createUserResult.error.message === `User with id ${user?.uid} already exists`) {
+        setValidateUser(true);
+        navigate('/');
+      } else {
+        setUser(null);
+        setValidateUser(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -107,9 +128,20 @@ const Signup = () => {
             </button>
           </div>
 
+          {/* Firebase Errors */}
           {error && (
             <Error>
-              <MdOutlineError size={23} /> {error}
+              <MdOutlineError size={23} />
+              {error}
+            </Error>
+          )}
+          {/* Graphql Errors */}
+          {createUserResult?.error && (
+            <Error>
+              <>
+                <MdOutlineError size={23} />
+                {createUserResult.error}
+              </>
             </Error>
           )}
           <div className="mt-5">

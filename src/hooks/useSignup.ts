@@ -9,7 +9,7 @@ import { CREATE_USER } from '../graphql/Mutation';
 
 export const useSignup = () => {
   const [, createUser] = useMutation(CREATE_USER);
-  const { setUser } = useContext(UserContext);
+  const { setUser, setValidateUser } = useContext(UserContext);
 
   const navigate = useNavigate();
   const [error, setError] = useState<null | string>(null);
@@ -25,6 +25,7 @@ export const useSignup = () => {
         });
         await createUser({ id: user.uid, name: user.displayName });
         setUser(user);
+        setValidateUser(true);
         navigate('/');
       });
       setIsPending(false);

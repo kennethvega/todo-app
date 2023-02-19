@@ -7,7 +7,7 @@ import Signup from './pages/Signup/Signup';
 
 import { UserContext } from './context/AuthContext';
 function App() {
-  const { user, isAuth } = useContext(UserContext);
+  const { user, isAuth, validateUser } = useContext(UserContext);
 
   // jest react test, react-hook-form
   // data router -nice to have
@@ -17,7 +17,7 @@ function App() {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route path="/" element={user ? <Home /> : <Login />} />
+            <Route path="/" element={validateUser && user ? <Home /> : <Login />} />
             <Route path="/login" element={!user ? <Login /> : <Home />} />
             <Route path="/register" element={!user ? <Signup /> : <Home />} />
           </Routes>

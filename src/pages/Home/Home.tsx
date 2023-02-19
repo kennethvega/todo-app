@@ -7,6 +7,7 @@ import { GET_TODOS } from '../../graphql/Query';
 import { useQuery } from 'urql';
 import { UserContext } from '../../context/AuthContext';
 import Spinner from '../../components/utility/Spinner';
+import useRedirectLoggedOutUser from '../../hooks/useRedirect';
 
 // type GetTodosQueryResult = {
 //   getTodos: TodoType[];
@@ -17,7 +18,8 @@ type TodosQueryResult = {
 };
 
 const Home = () => {
-  const { user } = useContext(UserContext);
+  const { user, validateUser } = useContext(UserContext);
+
   // fetch data
   const context = useMemo(() => ({ additionalTypenames: ['Todo'] }), []);
   const useTodosQuery = (userID: string | undefined) => {

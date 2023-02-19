@@ -11,6 +11,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { UserContext } from '../../context/AuthContext';
 import classNames from 'classnames';
 import Error from '../../components/utility/Error';
+import useRedirectLoggedOutUser from '../../hooks/useRedirect';
 
 const Login = () => {
   const { setUser } = useContext(UserContext);

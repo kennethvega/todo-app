@@ -1,12 +1,12 @@
-import { UserContext } from "./../context/AuthContext";
-import { useContext, useState } from "react";
-import { auth } from "../config/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { UserContext } from './../context/AuthContext';
+import { useContext, useState } from 'react';
+import { auth } from '../config/firebase-config';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+  const { setUser, setValidateUser } = useContext(UserContext);
 
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
@@ -17,9 +17,10 @@ export const useLogin = () => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((res) => {
         setUser(res.user);
+        setValidateUser(true);
         setIsPending(false);
         setError(null);
-        navigate("/");
+        navigate('/');
       })
       .catch((err) => {
         setError(err.message);
