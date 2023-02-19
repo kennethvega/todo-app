@@ -20,19 +20,18 @@ const TodoItem = ({ todo }: TodoItemProps) => {
   const [updateTodoResult, updateTodo] = useMutation(UPDATE_TODO);
   const [, updateComplete] = useMutation(UPDATE_COMPLETE);
 
-  const handleCheckBoxChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
-    await updateComplete({ id: todo.id, complete: !todo.done });
-  };
-  console.log(todo.id, todo.task);
-  // e:
-  const handleTaskUpdate = async () => {
-    await updateTodo({ id: todo.id, task: updateNewTask });
-    setOpenModal(false);
+  const handleCheckBoxChange = async () => {
+    await updateComplete({ id: todo.id, done: !todo.done });
   };
 
   const handleDelete = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     await deleteTask({ id: todo.id });
+  };
+
+  const handleTaskUpdate = async () => {
+    await updateTodo({ id: todo.id, task: updateNewTask });
+    setOpenModal(false);
   };
   // classnames library || clsx
   return (
