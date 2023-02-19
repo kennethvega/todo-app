@@ -13,7 +13,7 @@ const AddTodo = () => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     // wait first
-    await addTask({ userId: user?.uid, task: newTask, complete: false });
+    await addTask({ userId: user?.uid, task: newTask });
     setNewTask('');
   };
   return (
