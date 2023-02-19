@@ -23,7 +23,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
   const handleCheckBoxChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
     await updateComplete({ id: todo.id, complete: !todo.done });
   };
-
+  console.log(todo.id, todo.task);
   // e:
   const handleTaskUpdate = async () => {
     await updateTodo({ id: todo.id, task: updateNewTask });

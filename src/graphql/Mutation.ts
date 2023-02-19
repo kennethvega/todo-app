@@ -1,20 +1,3 @@
-// export const ADD_TODO = `
-// mutation AddTodo($userId:String!,$task:String!,$complete:Boolean!){
-//   addTodo(userId:$userId, task:$task,complete:$complete){
-//     id
-//     userId
-//     task
-//     complete
-//   }
-// }
-// `;
-// export const CREATE_USER = `
-// mutation CreateUser($id:String!, $name:String!){
-//   createUser(input:{id:$id,name:$name}){
-//     id
-//     name
-//   }
-// }`;
 export const ADD_TODO = `
 mutation CreateTodo($task:String!,$userId:String!){
   createTodo(input:{task:$task,userId:$userId}){
@@ -24,19 +7,14 @@ mutation CreateTodo($task:String!,$userId:String!){
      userID
   }
 }`;
-// export const ADD_TODO = `
-// mutation{
-//   createTodo(input:{
-//     task:"asdasd"
-//     userId:"Tb9uBltPQ8Rvbm61n2N0qlMW1VH3"
-//   }){
-//     id
-//     task
-//     done
-//     userID
-//   }
-// }`
 
+// export const DELETE_TODO = `
+// mutation DeleteTodo($id:ID!){
+//   deleteTodo(id:$id){
+//     id
+//   }
+// }
+// `;
 export const DELETE_TODO = `
 mutation DeleteTodo($id:ID!){
   deleteTodo(id:$id){
@@ -44,6 +22,13 @@ mutation DeleteTodo($id:ID!){
   }
 }
 `;
+
+// mutation {
+//   deleteTodo(id:"53c4af2e-21e0-447a-86d6-03951a7365c6")
+//   {
+//     id
+//   }
+// }
 
 export const UPDATE_TODO = `
 mutation UpdateTodo($id:ID!,$task:String!){
