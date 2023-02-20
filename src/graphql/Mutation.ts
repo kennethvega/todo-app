@@ -34,17 +34,6 @@ mutation DeleteTodo($id:ID!){
 }
 `;
 
-export const UPDATE_TODO = `
-mutation UpdateTodo($id:ID!,$task:String!){
-  updateTodo(id:$id,task:$task){
-    id
-    userId
-    task
-    complete
-  }
-}
-`;
-
 export const CREATE_USER = `
 mutation CreateUser($id:String!, $name:String!){
   createUser(input:{id:$id,name:$name}){
