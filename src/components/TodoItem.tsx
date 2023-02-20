@@ -4,7 +4,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import Tippy from '@tippyjs/react';
 import { OperationContext, useMutation } from 'urql';
 import { TodoType } from '../ts/Todos';
-import { DELETE_TODO, UPDATE_TODO_DONE, UPDATE_TODO } from '../graphql/Mutation';
+import { DELETE_TODO, UPDATE_TODO_DONE, UPDATE_TODO_TASK } from '../graphql/Mutation';
 import Modal from './utility/Modal';
 import Button from './utility/Button';
 import Spinner from './utility/Spinner';
@@ -19,7 +19,7 @@ const TodoItem = ({ todo, reexecuteQuery }: TodoItemProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [updateNewTask, setUpdateNewTask] = useState(todo.task);
   const [, deleteTask] = useMutation(DELETE_TODO); //naming best practice e.g. deleteTaskResult.fetching
-  const [updateTodoResult, updateTodo] = useMutation(UPDATE_TODO);
+  const [updateTodoResult, updateTodo] = useMutation(UPDATE_TODO_TASK);
   const [, updateTodoDone] = useMutation(UPDATE_TODO_DONE);
   const { user } = useContext(UserContext);
 
@@ -36,6 +36,7 @@ const TodoItem = ({ todo, reexecuteQuery }: TodoItemProps) => {
   const handleTaskUpdate: React.MouseEventHandler<HTMLSpanElement> = async (e) => {
     e.preventDefault();
     await updateTodo({ id: todo.id, task: updateNewTask });
+    reexecuteQuery({ requestPolicy: 'network-only' });
     setOpenModal(false);
   };
   // classnames library || clsx

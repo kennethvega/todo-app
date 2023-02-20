@@ -17,6 +17,15 @@ mutation UpdateTodoDone($id:ID!, $done:Boolean!){
 }
 `;
 
+export const UPDATE_TODO_TASK = `
+mutation UpdateTodoTask($id:ID!,$task:String!){
+  updateTodoTask(input:{id:$id,task:$task}){
+    id
+    task
+  }
+}
+`;
+
 export const DELETE_TODO = `
 mutation DeleteTodo($id:ID!){
   deleteTodo(id:$id){

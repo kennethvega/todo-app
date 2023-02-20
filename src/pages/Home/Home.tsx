@@ -21,7 +21,7 @@ type TodosQueryResult = {
 };
 const fetch = true;
 const Home = () => {
-  const { user, validateUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   // fetch data
   const context = useMemo(() => ({ additionalTypenames: ['Todo'] }), []);
   const useTodosQuery = (id: string | undefined) => {
@@ -33,7 +33,7 @@ const Home = () => {
   };
   const [result, reexecuteQuery] = useTodosQuery(user?.uid);
   const { fetching, data, error } = result;
-
+  console.log(data?.user.todos);
   return (
     <>
       <div className="mt-10">
