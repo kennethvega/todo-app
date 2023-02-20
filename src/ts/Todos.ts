@@ -2,5 +2,10 @@ export type TodoType = {
   done: boolean;
   id: string;
   task: string;
-  userId: string;
+  userID: string;
+};
+export type TodosQueryResult = {
+  user: {
+    todos: TodoType[];
+  };
 };

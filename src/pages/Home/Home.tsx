@@ -2,23 +2,13 @@ import { useContext, useMemo } from 'react';
 import Container from '../../components/utility/Container';
 import AddTodo from '../../components/AddTodo';
 import TodoItem from '../../components/TodoItem';
-import { TodoType } from '../../ts/Todos';
+import { TodosQueryResult, TodoType } from '../../ts/Todos';
 import { GET_TODOS } from '../../graphql/Query';
 import { useQuery } from 'urql';
 import { UserContext } from '../../context/AuthContext';
 import Spinner from '../../components/utility/Spinner';
 import Overlay from '../../components/utility/Overlay';
 
-// type GetTodosQueryResult = {
-//   getTodos: TodoType[];
-// };
-
-// best practice
-type TodosQueryResult = {
-  user: {
-    todos: TodoType[];
-  };
-};
 const fetch = true;
 const Home = () => {
   const { user, validateUser } = useContext(UserContext);
@@ -50,7 +40,7 @@ const Home = () => {
                 <div className="flex justify-center absolute top-1/2  left-1/2">
                   <Spinner />
                 </div>
-                <div className="bg-white w-full h-full z-50 fixed opacity-40"></div>
+                <div className="bg-white w-full h-full z-50 fixed opacity-70"></div>
               </>
             )}
             {data?.user?.todos.map((todo) => (
