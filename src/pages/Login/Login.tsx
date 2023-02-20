@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../../components/utility/Button';
-import Card from '../../components/utility/Card';
+import Button from '../../components/utility/button/Button';
+import Card from '../../components/utility/card/Card';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useLogin } from '../../hooks/useLogin';
 import Spinner from '../../components/utility/Spinner';
@@ -10,7 +10,7 @@ import { auth } from '../../config/firebase-config';
 import { FcGoogle } from 'react-icons/fc';
 import { UserContext } from '../../context/AuthContext';
 import classNames from 'classnames';
-import Error from '../../components/utility/Error';
+import Error from '../../components/utility/error/Error';
 import { useMutation } from 'urql';
 import { CREATE_USER } from '../../graphql/Mutation';
 

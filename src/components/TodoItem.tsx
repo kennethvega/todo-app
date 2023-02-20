@@ -6,7 +6,7 @@ import { OperationContext, useMutation } from 'urql';
 import { TodoType } from '../ts/Todos';
 import { DELETE_TODO, UPDATE_TODO_DONE, UPDATE_TODO_TASK } from '../graphql/Mutation';
 import Modal from './utility/Modal';
-import Button from './utility/Button';
+import Button from './utility/button/Button';
 import Spinner from './utility/Spinner';
 import { UserContext } from '../context/AuthContext';
 

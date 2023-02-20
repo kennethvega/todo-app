@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import Container from '../../components/utility/Container';
+import Container from '../../components/utility/container/Container';
 import AddTodo from '../../components/AddTodo';
 import TodoItem from '../../components/TodoItem';
 import { TodoType } from '../../ts/Todos';
@@ -47,10 +47,10 @@ const Home = () => {
           <div className="relative">
             {fetching && (
               <>
-                <div className="flex justify-center absolute top-1/2  left-1/2">
+                <div className="flex justify-center absolute top-1/2  left-1/2 z-50">
                   <Spinner />
                 </div>
-                <div className="bg-white w-full h-full z-50 fixed opacity-40"></div>
+                <div className="bg-white w-full h-full z-30 fixed opacity-60"></div>
               </>
             )}
             {data?.user?.todos.map((todo) => (

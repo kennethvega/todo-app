@@ -1,4 +1,4 @@
-import Button from './utility/Button';
+import Button from './utility/button/Button';
 import { Link } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
 import { useContext } from 'react';

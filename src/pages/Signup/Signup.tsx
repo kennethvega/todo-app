@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../../components/utility/Button';
-import Card from '../../components/utility/Card';
+import Button from '../../components/utility/button/Button';
+import Card from '../../components/utility/card/Card';
 import { useSignup } from '../../hooks/useSignup';
 import Spinner from '../../components/utility/Spinner';
 import { FcGoogle } from 'react-icons/fc';
@@ -9,7 +9,7 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { UserContext } from '../../context/AuthContext';
-import Error from '../../components/utility/Error';
+import Error from '../../components/utility/error/Error';
 import classNames from 'classnames';
 import { MdOutlineError } from 'react-icons/md';
 import { useMutation } from 'urql';
