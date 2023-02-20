@@ -1,35 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { AiOutlineDelete } from 'react-icons/ai';
 import Tippy from '@tippyjs/react';
-import { useMutation } from 'urql';
+import { OperationContext, useMutation } from 'urql';
 import { TodoType } from '../ts/Todos';
-import { DELETE_TODO, UPDATE_COMPLETE, UPDATE_TODO } from '../graphql/Mutation';
+import { DELETE_TODO, UPDATE_TODO_DONE, UPDATE_TODO } from '../graphql/Mutation';
 import Modal from './utility/Modal';
 import Button from './utility/Button';
 import Spinner from './utility/Spinner';
+import { UserContext } from '../context/AuthContext';
 
 type TodoItemProps = {
   todo: TodoType;
+  reexecuteQuery: (opts?: Partial<OperationContext> | undefined) => void;
 };
 
-const TodoItem = ({ todo }: TodoItemProps) => {
+const TodoItem = ({ todo, reexecuteQuery }: TodoItemProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [updateNewTask, setUpdateNewTask] = useState(todo.task);
-  const [deleteTaskResult, deleteTask] = useMutation(DELETE_TODO); //naming best practice e.g. deleteTaskResult.fetching
+  const [, deleteTask] = useMutation(DELETE_TODO); //naming best practice e.g. deleteTaskResult.fetching
   const [updateTodoResult, updateTodo] = useMutation(UPDATE_TODO);
-  const [, updateComplete] = useMutation(UPDATE_COMPLETE);
+  const [, updateTodoDone] = useMutation(UPDATE_TODO_DONE);
+  const { user } = useContext(UserContext);
 
   const handleCheckBoxChange = async () => {
-    await updateComplete({ id: todo.id, done: !todo.done });
+    await updateTodoDone({ id: todo.id, done: !todo.done });
+    reexecuteQuery({ requestPolicy: 'network-only' });
   };
 
-  const handleDelete = async (e: React.SyntheticEvent) => {
+  const handleDelete: React.MouseEventHandler<HTMLSpanElement> = async (e) => {
     e.preventDefault();
     await deleteTask({ id: todo.id });
   };
 
-  const handleTaskUpdate = async () => {
+  const handleTaskUpdate: React.MouseEventHandler<HTMLSpanElement> = async (e) => {
+    e.preventDefault();
     await updateTodo({ id: todo.id, task: updateNewTask });
     setOpenModal(false);
   };
@@ -58,7 +63,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
       {openModal && (
         <Modal openModal onClose={() => setOpenModal(false)}>
           <h3 className="mt-3 mb-2 text-2xl">Edit {todo.task}</h3>
-          <input value={updateNewTask} onChange={(e) => setUpdateNewTask(e.target.value)} />
+          <input value={updateNewTask} onChange={(e) => setUpdateNewTask(e.target.value)} className="input" />
 
           <div className="mt-10 min-w-[20rem]">
             {updateTodoResult.fetching ? (
