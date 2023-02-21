@@ -3,11 +3,12 @@ import Container from '../../components/utility/container/Container';
 import AddTodo from '../../components/AddTodo';
 import TodoItem from '../../components/TodoItem';
 import { TodoType } from '../../ts/Todos';
-import { GET_TODOS } from '../../graphql/Query';
+
 import { useQuery } from 'urql';
 import { UserContext } from '../../context/AuthContext';
 import Spinner from '../../components/utility/Spinner';
 import Overlay from '../../components/utility/Overlay';
+import { GET_TODOS } from '../../graphql/Query';
 
 // type GetTodosQueryResult = {
 //   getTodos: TodoType[];
@@ -15,25 +16,24 @@ import Overlay from '../../components/utility/Overlay';
 
 // best practice
 type TodosQueryResult = {
-  user: {
-    todos: TodoType[];
-  };
+  todos: TodoType[];
 };
 const fetch = true;
 const Home = () => {
   const { user } = useContext(UserContext);
+
   // fetch data
-  const context = useMemo(() => ({ additionalTypenames: ['Todo'] }), []);
-  const useTodosQuery = (id: string | undefined) => {
+  const context = useMemo(() => ({ additionalTypenames: ['Todo', 'User', 'UpdateTodoDone'] }), []);
+  const useTodosQuery = (userID: string | undefined) => {
     return useQuery<TodosQueryResult>({
       query: GET_TODOS,
-      variables: { id },
+      variables: { userID },
       context,
     });
   };
   const [result, reexecuteQuery] = useTodosQuery(user?.uid);
   const { fetching, data, error } = result;
-  console.log(data?.user.todos);
+
   return (
     <>
       <div className="mt-10">
@@ -53,12 +53,12 @@ const Home = () => {
                 <div className="bg-white w-full h-full z-30 fixed opacity-60"></div>
               </>
             )}
-            {data?.user?.todos.map((todo) => (
+            {data?.todos.map((todo) => (
               <TodoItem todo={todo} key={todo.id} reexecuteQuery={reexecuteQuery} />
             ))}
           </div>
 
-          {data?.user?.todos.length === 0 && <p className="flex justify-center text-red">No task yet</p>}
+          {data?.todos.length === 0 && <p className="flex justify-center text-red">No task yet</p>}
         </Container>
       </div>
     </>

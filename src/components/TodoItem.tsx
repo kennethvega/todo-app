@@ -21,11 +21,9 @@ const TodoItem = ({ todo, reexecuteQuery }: TodoItemProps) => {
   const [, deleteTask] = useMutation(DELETE_TODO); //naming best practice e.g. deleteTaskResult.fetching
   const [updateTodoResult, updateTodo] = useMutation(UPDATE_TODO_TASK);
   const [, updateTodoDone] = useMutation(UPDATE_TODO_DONE);
-  const { user } = useContext(UserContext);
 
   const handleCheckBoxChange = async () => {
     await updateTodoDone({ id: todo.id, done: !todo.done });
-    reexecuteQuery({ requestPolicy: 'network-only' });
   };
 
   const handleDelete: React.MouseEventHandler<HTMLSpanElement> = async (e) => {
@@ -35,8 +33,7 @@ const TodoItem = ({ todo, reexecuteQuery }: TodoItemProps) => {
 
   const handleTaskUpdate: React.MouseEventHandler<HTMLSpanElement> = async (e) => {
     e.preventDefault();
-    await updateTodo({ id: todo.id, task: updateNewTask });
-    reexecuteQuery({ requestPolicy: 'network-only' });
+    await updateTodo({ id: todo.id, task: updateNewTask }, { additionalTypenames: ['Todo'] });
     setOpenModal(false);
   };
   // classnames library || clsx
