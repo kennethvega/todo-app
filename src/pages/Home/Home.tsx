@@ -9,6 +9,7 @@ import { UserContext } from '../../context/AuthContext';
 import Spinner from '../../components/utility/Spinner';
 import Overlay from '../../components/utility/Overlay';
 import { GET_TODOS } from '../../graphql/Query';
+import TodoSkeleton from '../../components/utility/todoSkeleton/TodoSkeleton';
 
 // type GetTodosQueryResult = {
 //   getTodos: TodoType[];
@@ -47,12 +48,10 @@ const Home = () => {
           <div className="relative">
             {fetching && (
               <>
-                <div className="flex justify-center absolute top-1/2  left-1/2 z-50">
-                  <Spinner />
-                </div>
-                <div className="bg-white w-full h-full z-30 fixed opacity-60"></div>
+                <TodoSkeleton /> <TodoSkeleton /> <TodoSkeleton />
               </>
             )}
+
             {data?.todos.map((todo) => (
               <TodoItem todo={todo} key={todo.id} reexecuteQuery={reexecuteQuery} />
             ))}
